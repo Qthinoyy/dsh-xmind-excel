@@ -1,0 +1,69 @@
+{
+  "name": "dsh-xmind-excel",
+  "version": "1.0.0",
+  "description": "Convert XMind mind maps to Excel workbooks inside DeepSeek Harness: outline, test case, checklist and merged matrix views through two tools. Local only, no runtime dependencies.",
+  "author": {
+    "name": "欧阳秋生",
+    "url": "https://github.com/Qthinoyy"
+  },
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "lib/",
+    "skills/",
+    "locale/",
+    "docs/",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "README.zh.md",
+    "CHANGELOG.md",
+    "PUBLISHING.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "engines": {
+      "dsh": ">=0.2.0-rc.1 <0.3.0-0"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "xmind",
+    "excel",
+    "xlsx",
+    "mindmap",
+    "testcase",
+    "converter"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "tag": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qthinoyy/dsh-xmind-excel.git"
+  },
+  "homepage": "https://github.com/Qthinoyy/dsh-xmind-excel#readme",
+  "bugs": {
+    "url": "https://github.com/Qthinoyy/dsh-xmind-excel/issues"
+  }
+}

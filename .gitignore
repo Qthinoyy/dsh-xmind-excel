@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# build artifacts
+dist/
+*.tgz
+*.xlsx
+
+# local verification
+.playwright-mcp/
+_scratch/
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

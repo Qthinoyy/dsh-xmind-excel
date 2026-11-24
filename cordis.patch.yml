@@ -1,0 +1,4 @@
+# dsh-xmind-excel bundle patch: inserts the plugin row into a profile's layer stack.
+- insert:
+    - id: xmind-excel
+      name: 'dsh-xmind-excel'
