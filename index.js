@@ -38,9 +38,9 @@ function formatConvertResult(result) {
     `mode=${result.mode} sheets=${result.sheets} nodes=${result.nodes} rows=${result.rows} cases=${result.cases} size=${formatBytes(result.bytes)}`,
   ]
   if (result.qa) {
-    const { sceneLevel, levelOffset, preconditionCells, stepCells, unclassified } = result.qa
+    const { sceneLevel, levelOffset, unclassifiedPolicy, preconditionCells, stepCells, sceneAugmented, unclassified, unclassifiedPlaced } = result.qa
     lines.push(
-      `qa: sceneLevel=${sceneLevel} levelOffset=${levelOffset} preconditionCells=${preconditionCells} stepCells=${stepCells} unclassifiedNodes=${unclassified}`,
+      `qa: sceneLevel=${sceneLevel} levelOffset=${levelOffset} unclassifiedPolicy=${unclassifiedPolicy} preconditionCells=${preconditionCells} stepCells=${stepCells} sceneAugmented=${sceneAugmented} unclassified=${unclassified}(placed ${unclassifiedPlaced})`,
     )
     lines.push('Review 「画布.分类核对」 to accept or fix the inferred 前置条件 / 操作步骤 split.')
   }
@@ -95,6 +95,7 @@ function normalizeArgs(args) {
     levelOffset: args?.levelOffset,
     preconditionDepth: args?.preconditionDepth,
     stepDepth: args?.stepDepth,
+    unclassified: args?.unclassified,
     withDetail: args?.withDetail,
     sheet: args?.sheet,
     maxLevel: args?.maxLevel,
@@ -178,6 +179,11 @@ export function apply(ctx) {
           levelOffset: { type: 'string', description: 'qa mode only: shift module/submodule/scene levels by this amount, e.g. 1 when the first level is a version or device rather than a module.' },
           preconditionDepth: { type: 'string', description: 'qa mode only: force these tree levels to count as 前置条件, e.g. "4".' },
           stepDepth: { type: 'string', description: 'qa mode only: force these tree levels to count as 操作步骤, e.g. "5".' },
+          unclassified: {
+            type: 'string',
+            enum: ['scene', 'steps', 'drop'],
+            description: 'qa mode only: where undecided nodes go. scene (default) appends them to 用例场景, steps appends them to 操作步骤, drop keeps them only in the 分类核对 sheet.',
+          },
           withDetail: { type: 'boolean', description: 'qa mode only: write the 分类核对 review sheet (default true).' },
           sheet: { type: 'string', description: 'Only convert the canvas whose title matches exactly, or contains, this text.' },
           maxLevel: { type: 'string', description: 'Level columns to expand, 1–30; defaults to 12.' },
@@ -203,6 +209,7 @@ export function apply(ctx) {
           levelOffset: options.levelOffset === undefined ? undefined : Number.parseInt(options.levelOffset, 10),
           preconditionDepth: options.preconditionDepth,
           stepDepth: options.stepDepth,
+          unclassified: options.unclassified,
           withDetail: options.withDetail,
           sheet: options.sheet,
           maxLevel: options.maxLevel ?? 12,

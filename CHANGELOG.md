@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.4 — 2026-11-24
+
+- **Nothing is dropped silently any more**: undecided nodes default to the 用例场景 column (append with ` / `), configurable through `unclassified: "scene" | "steps" | "drop"`. The 分类核对 sheet records 未分类→场景 / 未分类→步骤 for every such decision.
+- **Scene detection**: a node whose child is a question (是否/如何/怎么) is treated as 场景 instead of a step or precondition.
+- **Action nouns** (孵化/变身/切换/升级/刷新/抽卡/兑换/发送/删除/解锁…) count as 操作步骤.
+
 ## 1.0.3 — 2026-11-24
 
 - **Classifier coverage**: navigation and confirmation actions (下一步/继续/确认/确定/取消/退出/完成/重试) now count as 操作步骤; condition openers (根据/按照/针对/当/若/如果/需要) and device/network/system wording (机型/设备/网络/系统/通道/权限/条件/场景/情况/开关) count as 前置条件.
