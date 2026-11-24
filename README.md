@@ -85,7 +85,7 @@ Case recognition rules for `testcase` are documented in the bundled skill and in
 ## Development
 
 ```powershell
-node --test                 # 34 tests: parsing, four views, zip/xlsx structure, error paths, packaging
+node --test                 # 35 tests: parsing, four views, zip/xlsx structure, error paths, packaging
 node -e "import('./lib/convert.js').then(...)"   # or use the tools from a DSH session
 ```
 

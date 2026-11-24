@@ -84,7 +84,7 @@ xmind_to_excel { input: "D:\\cases\\计算器.xmind",
 ## 开发
 
 ```powershell
-node --test        # 34 项测试：解析、四种视图、zip/xlsx 结构、错误路径、打包规范
+node --test        # 35 项测试：解析、四种视图、zip/xlsx 结构、错误路径、打包规范
 ```
 
 目录结构：
