@@ -38,9 +38,9 @@ function formatConvertResult(result) {
     `mode=${result.mode} sheets=${result.sheets} nodes=${result.nodes} rows=${result.rows} cases=${result.cases} size=${formatBytes(result.bytes)}`,
   ]
   if (result.qa) {
-    const { sceneLevel, levelOffset, unclassifiedPolicy, preconditionCells, stepCells, sceneAugmented, resultExpected, unclassified, unclassifiedPlaced } = result.qa
+    const { sceneLevel, levelOffset, unclassifiedPolicy, results, preconditionCells, stepCells, sceneAugmented, resultExpected, unclassified, unclassifiedPlaced } = result.qa
     lines.push(
-      `qa: sceneLevel=${sceneLevel} levelOffset=${levelOffset} unclassifiedPolicy=${unclassifiedPolicy} preconditionCells=${preconditionCells} stepCells=${stepCells} sceneAugmented=${sceneAugmented} resultNodes=${resultExpected} unclassified=${unclassified}(placed ${unclassifiedPlaced})`,
+      `qa: sceneLevel=${sceneLevel} levelOffset=${levelOffset} unclassifiedPolicy=${unclassifiedPolicy} results=${results} preconditionCells=${preconditionCells} stepCells=${stepCells} sceneAugmented=${sceneAugmented} resultNodes=${resultExpected} unclassified=${unclassified}(placed ${unclassifiedPlaced})`,
     )
     lines.push('Review 「画布.分类核对」 to accept or fix the inferred 前置条件 / 操作步骤 split.')
   }
@@ -96,6 +96,7 @@ function normalizeArgs(args) {
     preconditionDepth: args?.preconditionDepth,
     stepDepth: args?.stepDepth,
     unclassified: args?.unclassified,
+    results: args?.results,
     withDetail: args?.withDetail,
     sheet: args?.sheet,
     maxLevel: args?.maxLevel,
@@ -184,6 +185,11 @@ export function apply(ctx) {
             enum: ['scene', 'steps', 'drop'],
             description: 'qa mode only: where undecided nodes go. steps (default) appends them to 操作步骤, scene appends them to 用例场景, drop keeps them only in the 分类核对 sheet.',
           },
+          results: {
+            type: 'string',
+            enum: ['off', 'on'],
+            description: 'qa mode only: off (default) keeps assertion wording such as 形象跟随切换 in 操作步骤; on moves a result-worded node directly above the leaf into 预期结果 as 过程结果 → 最终结果.',
+          },
           withDetail: { type: 'boolean', description: 'qa mode only: write the 分类核对 review sheet (default true).' },
           sheet: { type: 'string', description: 'Only convert the canvas whose title matches exactly, or contains, this text.' },
           maxLevel: { type: 'string', description: 'Level columns to expand, 1–30; defaults to 12.' },
@@ -210,6 +216,7 @@ export function apply(ctx) {
           preconditionDepth: options.preconditionDepth,
           stepDepth: options.stepDepth,
           unclassified: options.unclassified,
+          results: options.results,
           withDetail: options.withDetail,
           sheet: options.sheet,
           maxLevel: options.maxLevel ?? 12,

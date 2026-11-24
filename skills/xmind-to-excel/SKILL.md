@@ -45,7 +45,7 @@ XMind does not encode "precondition" vs "step"; the map only has titles, notes, 
 
 Nothing decisive (or a question like 是否/如何/怎么) → undecided: by default it is appended to 操作步骤 (never dropped), recorded in 分类核对 as 未分类→步骤, and its full path stays in XMind 来源. Pass `unclassified: "scene"` to append undecided nodes to 用例场景 instead, or `"drop"` to keep them only in the review sheet. Tell the user to scan 分类核对 before importing the table; that review is the intended workflow, not a defect.
 
-Result wording wins over action words: a node containing 不变/跟随/同步/生效/更新/显示/展示/出现/提示/弹窗/置灰/高亮/消失/成功/失败/可查看/查看所有 (and not starting with an imperative) is a 预期, chained into the 预期结果 column as `过程结果 → 最终结果`.
+Result wording is **opt-in** through `results: "on"`: only the node directly above the leaf is considered, it must not start with an imperative verb, and nodes containing 是否/怎么/如何/判断/待确认 or branch labels (是/否/有/无) are never treated as results. With the default `results: "off"`, assertion wording such as 形象跟随切换 stays in 操作步骤 (the 1.0.4 behaviour). Do not enable it by default — on maps with decision sequences it moves real steps out of the step column.
 
 Note: maps written in a decision-tree style have almost no real steps — most nodes are conditions expectations. In that case prefer reporting that 操作步骤 is mostly empty rather than accepting a guessed split.
 

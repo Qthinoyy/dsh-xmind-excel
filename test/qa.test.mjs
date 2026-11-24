@@ -68,7 +68,7 @@ test('buildQa splits preconditions from steps and writes the review sheet', asyn
   assert.equal(qa.stats.unclassified, 1)
   assert.equal(qa.stats.unclassifiedPlaced, 1)
   assert.equal(qa.stats.sceneAugmented, 1)
-  assert.equal(qa.stats.resultExpected, 2)
+  assert.equal(qa.stats.resultExpected, 0)
 
   const byExpected = new Map(qa.rows.slice(1).map((row) => [row[6], row]))
   assert.equal(byExpected.get('显示成功页面')[0], '模块A')
@@ -85,11 +85,11 @@ test('buildQa splits preconditions from steps and writes the review sheet', asyn
   assert.equal(byExpected.get('状态不需实时更新')[2], '场景3 / 他人孵化')
   assert.equal(byExpected.get('状态不需实时更新')[4], '')
   assert.equal(byExpected.get('状态不需实时更新')[5], '是否实时变化？')
-  // result wording wins over action verbs: both ancestors land in the expected column
+  // default (results off): assertion wording stays in the step chain, like 1.0.4
   const resultRow = qa.rows.find((row) => typeof row[6] === 'string' && row[6].endsWith('查看所有形象点位'))
   assert.ok(resultRow, 'row for 查看所有形象点位 exists')
-  assert.equal(resultRow[5], '')
-  assert.equal(resultRow[6], 'pad选择同步到cat → 形象跟随切换 → 查看所有形象点位')
+  assert.equal(resultRow[5], 'pad选择同步到cat → 形象跟随切换')
+  assert.equal(resultRow[6], '查看所有形象点位')
 
   assert.equal(qa.detail.length - 1, 9)
   assert.ok(qa.detail.some((row) => row[3] === '前置' && String(row[6]).includes('前缀')))
@@ -129,6 +129,18 @@ test('qa mode honours levelOffset and withDetail=false', async () => {
   const workbookXml = readZip(workbook).get('xl/workbook.xml').toString('utf8')
   const names = [...workbookXml.matchAll(/<sheet name="([^"]+)"/gu)].map((match) => match[1])
   assert.deepEqual(names, ['画布 1.用例表'])
+})
+
+test('results:"on" moves a result-worded leaf parent into 预期结果', async () => {
+  const sheet = await sheetFromFixture()
+  const qa = buildQa(sheet, { sceneLevel: 3, results: 'on' })
+  const row = qa.rows.find((item) => typeof item[6] === 'string' && item[6].endsWith('查看所有形象点位'))
+  assert.ok(row)
+  assert.equal(row[5], 'pad选择同步到cat')
+  assert.equal(row[6], '形象跟随切换 → 查看所有形象点位')
+  // question-ish nodes are never treated as results
+  const other = qa.rows.find((item) => typeof item[6] === 'string' && item[6].endsWith('状态不需实时更新'))
+  assert.equal(other[5], '是否实时变化？')
 })
 
 test('forced depths override the heuristic', async () => {

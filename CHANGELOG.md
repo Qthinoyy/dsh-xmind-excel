@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6 — 2026-11-24
+
+- **Result wording is opt-in again**: `results` defaults to `off`, so the QA table matches the 1.0.4 behaviour. Pass `results: "on"` to move a result-worded node into 预期结果.
+- **Refined rule for `results: "on"`**: only the node directly above the leaf is considered, it must not start with an imperative verb, and nodes containing 是否/怎么/如何/判断/待确认 or branch labels (是/否/有/无) are never treated as results. This fixes the over-firing that moved 判断是否出现过孵化过程 / 宠物蛋出现动效 out of 操作步骤 in 1.0.5.
+
 ## 1.0.5 — 2026-11-24
 
 - **Result wording becomes 预期结果**: nodes with assertion wording (不变/跟随/同步/生效/更新/显示/展示/出现/提示/弹窗/置灰/高亮/消失/成功/失败/可查看/查看所有…, and no imperative verb at the start) are now chained into 预期结果 as `过程结果 → 最终结果` instead of being counted as 操作步骤. Example: `pad选择同步到cat → 形象跟随切换 → 查看所有形象点位`.
