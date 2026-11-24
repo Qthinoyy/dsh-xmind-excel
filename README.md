@@ -1,4 +1,7 @@
-﻿# XMind to Excel for DeepSeek Harness
+# XMind to Excel for DeepSeek Harness
+
+[![npm version](https://img.shields.io/npm/v/dsh-xmind-excel.svg)](https://www.npmjs.com/package/dsh-xmind-excel)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Convert `.xmind` mind maps into `.xlsx` workbooks from inside DeepSeek Harness (DSH).
 Two tools, four views, no runtime dependencies, no network access.
@@ -21,6 +24,14 @@ Two tools, four views, no runtime dependencies, no network access.
 `xmind_to_excel` accepts XMind 2020+/Zen containers (`content.json`) and XMind 8 containers (`content.xml`), including floating topics (converted as ordinary children).
 
 ## Install
+
+**From npm (recommended):**
+
+```
+plugin_manager { action: "install_bundle", target: "dsh-xmind-excel@1.0.1" }
+```
+
+Or open **Plugins** → **Add plugin** and paste `dsh-xmind-excel@1.0.1`.
 
 **From a local directory** — the usual path for a plugin under development:
 

@@ -1,4 +1,7 @@
-﻿# XMind 转 Excel（DeepSeek Harness 插件）
+# XMind 转 Excel（DeepSeek Harness 插件）
+
+[![npm version](https://img.shields.io/npm/v/dsh-xmind-excel.svg)](https://www.npmjs.com/package/dsh-xmind-excel)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 在 DeepSeek Harness（DSH）里把 `.xmind` 思维导图转成 `.xlsx` 工作簿。两个工具、四种视图，无运行时依赖、不联网。
 
@@ -21,7 +24,15 @@
 
 ## 安装
 
-**本地目录安装**（插件开发/内部分发常用）：
+**从 npm 安装（推荐）**：
+
+```
+plugin_manager { action: "install_bundle", target: "dsh-xmind-excel@1.0.1" }
+```
+
+或在侧栏 **Plugins** → **Add plugin** 里填 `dsh-xmind-excel@1.0.1`。
+
+**从本地目录安装**（插件开发/内部分发常用）：
 
 1. 打开侧栏 **Plugins**；
 2. 点 **Add plugin**，选中本目录（`dsh-xmind-excel/`）；或用 `plugin_manager` 的 `action: install_bundle`、target 指向本目录；

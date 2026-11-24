@@ -4,10 +4,11 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: read
-  id-token: write # npm provenance attestation
+  id-token: write # OIDC token for npm trusted publishing + provenance
 
 jobs:
   publish:
@@ -18,12 +19,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
+
+      # npm >= 11.5 is required for token-free trusted publishing.
+      - name: Upgrade npm
+        run: npm install --global npm@11
 
       - name: Test
         run: node --test
 
+      # No NPM_TOKEN: the registry authenticates this workflow through OIDC
+      # once the trusted publisher is configured on the npm package settings page.
       - name: Publish with provenance
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

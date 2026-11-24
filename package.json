@@ -1,6 +1,6 @@
-{
+﻿{
   "name": "dsh-xmind-excel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert XMind mind maps to Excel workbooks inside DeepSeek Harness: outline, test case, checklist and merged matrix views through two tools. Local only, no runtime dependencies.",
   "author": {
     "name": "欧阳秋生",
@@ -67,3 +67,4 @@
     "url": "https://github.com/Qthinoyy/dsh-xmind-excel/issues"
   }
 }
+

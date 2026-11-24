@@ -37,14 +37,14 @@ What does **not** establish authorship: a local folder, a tarball sent to someon
    git push -u origin main
    ```
 
-3. Publish to npm (the marketplace indexes npm packages):
+3. Publish to npm. **1.0.0 was published manually with an OTP** because npm requires 2FA (or a bypass-2FA token) for publishing and refuses OIDC for a package that does not exist yet. From 1.0.1 on, releases go through **Trusted Publishing**: configure it once at `npmjs.com/package/dsh-xmind-excel/access` → Trusted publishing → GitHub Actions (`Qthinoyy/dsh-xmind-excel`, workflow `publish.yml`), then tag and push:
 
    ```powershell
-   npm login
-   npm publish --access public
-   git tag v1.0.0
-   git push --tags      # triggers .github/workflows/publish.yml with provenance
+   git tag v1.0.1
+   git push origin v1.0.1   # Actions publishes with provenance, no token
    ```
+
+   The `NPM_TOKEN` repository secret is no longer read by the workflow; delete it once a trusted-publishing release succeeds. Direct publishes with a token will stop working in January 2027, when npm ends bypass-2FA tokens for publishing.
 
    The name `dsh-xmind-excel` was free on npm when this was prepared (HTTP 404). Unscoped names are first-come-first-served; register it under your npm account soon, or publish scoped (`@<scope>/dsh-xmind-excel`) if the short name may be contested.
 

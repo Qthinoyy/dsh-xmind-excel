@@ -1,5 +1,10 @@
 ﻿# Changelog
 
+## 1.0.1 — 2026-11-24
+
+- Publish through npm **Trusted Publishing (OIDC)**: the release workflow no longer reads NPM_TOKEN; provenance is generated for every tagged release.
+- README gains the npm version badge and install-from-registry instructions.
+
 ## 1.0.0 — 2026-11-24
 
 First release.
@@ -11,4 +16,5 @@ First release.
 - **Packaging**: localized metadata (English, Chinese), detail documents with one feature image, original icon, bundled `xmind-to-excel` skill, MIT license, 25 `node:test` cases covering conversion, structure, packaging and attribution.
 - **Attribution and release**: `Copyright (c) 2026 欧阳秋生` in the MIT licence, `author` in the manifest, `PUBLISHING.md` with the evidence chain, `scripts/set-identity.mjs` to fill the GitHub/npm identity in one pass, and a tag-triggered GitHub Actions workflow that publishes with npm provenance.
 - **Limits**: input up to 50 MB; text structure only; rule-based case extraction.
+
 
