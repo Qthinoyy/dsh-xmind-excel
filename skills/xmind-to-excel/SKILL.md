@@ -43,7 +43,9 @@ XMind does not encode "precondition" vs "step"; the map only has titles, notes, 
 3. Bracket annotation — text in （…) → 前置条件, priority markers `(P1)` and `(锚定)` exceptions excluded.
 4. Wording — verb-initial → 操作步骤; a verb word plus a state word → 操作步骤 (the condition stays inside the step text); state words 已/未/当前/断网/默认/安装… → 前置条件.
 
-Nothing decisive (or a question like 是否/如何/怎么) → undecided: by default it is appended to 用例场景 (never dropped), recorded in 分类核对 as 未分类→场景, and its full path stays in XMind 来源. Pass `unclassified: "steps"` to append undecided nodes to 操作步骤 instead, or `"drop"` to keep them only in the review sheet. Tell the user to scan 分类核对 before importing the table; that review is the intended workflow, not a defect.
+Nothing decisive (or a question like 是否/如何/怎么) → undecided: by default it is appended to 操作步骤 (never dropped), recorded in 分类核对 as 未分类→步骤, and its full path stays in XMind 来源. Pass `unclassified: "scene"` to append undecided nodes to 用例场景 instead, or `"drop"` to keep them only in the review sheet. Tell the user to scan 分类核对 before importing the table; that review is the intended workflow, not a defect.
+
+Result wording wins over action words: a node containing 不变/跟随/同步/生效/更新/显示/展示/出现/提示/弹窗/置灰/高亮/消失/成功/失败/可查看/查看所有 (and not starting with an imperative) is a 预期, chained into the 预期结果 column as `过程结果 → 最终结果`.
 
 Note: maps written in a decision-tree style have almost no real steps — most nodes are conditions expectations. In that case prefer reporting that 操作步骤 is mostly empty rather than accepting a guessed split.
 

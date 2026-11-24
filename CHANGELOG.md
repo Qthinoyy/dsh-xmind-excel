@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.5 — 2026-11-24
+
+- **Result wording becomes 预期结果**: nodes with assertion wording (不变/跟随/同步/生效/更新/显示/展示/出现/提示/弹窗/置灰/高亮/消失/成功/失败/可查看/查看所有…, and no imperative verb at the start) are now chained into 预期结果 as `过程结果 → 最终结果` instead of being counted as 操作步骤. Example: `pad选择同步到cat → 形象跟随切换 → 查看所有形象点位`.
+- **Default `unclassified` policy is now `steps`** (the 操作优先 behaviour), with `scene` and `drop` still available.
+- 分类核对 records the new `预期→结果` placement.
+
 ## 1.0.4 — 2026-11-24
 
 - **Nothing is dropped silently any more**: undecided nodes default to the 用例场景 column (append with ` / `), configurable through `unclassified: "scene" | "steps" | "drop"`. The 分类核对 sheet records 未分类→场景 / 未分类→步骤 for every such decision.

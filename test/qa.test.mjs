@@ -64,10 +64,11 @@ test('buildQa splits preconditions from steps and writes the review sheet', asyn
   const qa = buildQa(sheet, { sceneLevel: 3 })
   assert.deepEqual(qa.rows[0], QA_HEADER)
   assert.deepEqual(qa.detail[0], QA_DETAIL_HEADER)
-  assert.equal(qa.rows.length - 1, 5)
+  assert.equal(qa.rows.length - 1, 6)
   assert.equal(qa.stats.unclassified, 1)
   assert.equal(qa.stats.unclassifiedPlaced, 1)
   assert.equal(qa.stats.sceneAugmented, 1)
+  assert.equal(qa.stats.resultExpected, 2)
 
   const byExpected = new Map(qa.rows.slice(1).map((row) => [row[6], row]))
   assert.equal(byExpected.get('显示成功页面')[0], '模块A')
@@ -80,12 +81,17 @@ test('buildQa splits preconditions from steps and writes the review sheet', asyn
   assert.equal(byExpected.get('结果A')[5], '备注编号步骤')
   assert.equal(byExpected.get('结果B')[4], '无信号')
   assert.equal(byExpected.get('结果B')[5], '')
-  // 他人孵化 is a scene (its child is a question); 是否实时变化？ is undecided and appended to the scene
-  assert.equal(byExpected.get('状态不需实时更新')[2], '场景3 / 他人孵化 / 是否实时变化？')
+  // 他人孵化 is a scene (its child is a question); 是否实时变化？ is undecided and appended to steps (default policy)
+  assert.equal(byExpected.get('状态不需实时更新')[2], '场景3 / 他人孵化')
   assert.equal(byExpected.get('状态不需实时更新')[4], '')
-  assert.equal(byExpected.get('状态不需实时更新')[5], '')
+  assert.equal(byExpected.get('状态不需实时更新')[5], '是否实时变化？')
+  // result wording wins over action verbs: both ancestors land in the expected column
+  const resultRow = qa.rows.find((row) => typeof row[6] === 'string' && row[6].endsWith('查看所有形象点位'))
+  assert.ok(resultRow, 'row for 查看所有形象点位 exists')
+  assert.equal(resultRow[5], '')
+  assert.equal(resultRow[6], 'pad选择同步到cat → 形象跟随切换 → 查看所有形象点位')
 
-  assert.equal(qa.detail.length - 1, 7)
+  assert.equal(qa.detail.length - 1, 9)
   assert.ok(qa.detail.some((row) => row[3] === '前置' && String(row[6]).includes('前缀')))
   assert.ok(qa.detail.every((row, index) => index === 0 || typeof row[1] === 'number'))
 })
@@ -93,7 +99,7 @@ test('buildQa splits preconditions from steps and writes the review sheet', asyn
 test('qa mode writes the main sheet plus the review sheet', async () => {
   const buffer = await readFile(fixture('sample-qa.xmind'))
   const { buffer: workbook, stats } = convertBuffer(buffer, { filename: 'sample-qa.xmind', mode: 'qa', sceneLevel: 3 })
-  assert.equal(stats.rows, 5)
+  assert.equal(stats.rows, 6)
   assert.equal(stats.qa.sceneLevel, 3)
   assert.equal(stats.qa.unclassified, 1)
   assert.equal(stats.qa.unclassifiedPlaced, 1)
@@ -102,7 +108,7 @@ test('qa mode writes the main sheet plus the review sheet', async () => {
   assert.deepEqual(names, ['画布 1.用例表', '画布 1.分类核对'])
   const main = rowsOf(workbook, 1)
   assert.deepEqual(main[0], QA_HEADER)
-  assert.equal(main.length, 6)
+  assert.equal(main.length, 7)
 })
 
 test('qa mode honours levelOffset and withDetail=false', async () => {

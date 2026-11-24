@@ -38,9 +38,9 @@ function formatConvertResult(result) {
     `mode=${result.mode} sheets=${result.sheets} nodes=${result.nodes} rows=${result.rows} cases=${result.cases} size=${formatBytes(result.bytes)}`,
   ]
   if (result.qa) {
-    const { sceneLevel, levelOffset, unclassifiedPolicy, preconditionCells, stepCells, sceneAugmented, unclassified, unclassifiedPlaced } = result.qa
+    const { sceneLevel, levelOffset, unclassifiedPolicy, preconditionCells, stepCells, sceneAugmented, resultExpected, unclassified, unclassifiedPlaced } = result.qa
     lines.push(
-      `qa: sceneLevel=${sceneLevel} levelOffset=${levelOffset} unclassifiedPolicy=${unclassifiedPolicy} preconditionCells=${preconditionCells} stepCells=${stepCells} sceneAugmented=${sceneAugmented} unclassified=${unclassified}(placed ${unclassifiedPlaced})`,
+      `qa: sceneLevel=${sceneLevel} levelOffset=${levelOffset} unclassifiedPolicy=${unclassifiedPolicy} preconditionCells=${preconditionCells} stepCells=${stepCells} sceneAugmented=${sceneAugmented} resultNodes=${resultExpected} unclassified=${unclassified}(placed ${unclassifiedPlaced})`,
     )
     lines.push('Review 「画布.分类核对」 to accept or fix the inferred 前置条件 / 操作步骤 split.')
   }
@@ -182,7 +182,7 @@ export function apply(ctx) {
           unclassified: {
             type: 'string',
             enum: ['scene', 'steps', 'drop'],
-            description: 'qa mode only: where undecided nodes go. scene (default) appends them to 用例场景, steps appends them to 操作步骤, drop keeps them only in the 分类核对 sheet.',
+            description: 'qa mode only: where undecided nodes go. steps (default) appends them to 操作步骤, scene appends them to 用例场景, drop keeps them only in the 分类核对 sheet.',
           },
           withDetail: { type: 'boolean', description: 'qa mode only: write the 分类核对 review sheet (default true).' },
           sheet: { type: 'string', description: 'Only convert the canvas whose title matches exactly, or contains, this text.' },
