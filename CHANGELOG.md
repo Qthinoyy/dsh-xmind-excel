@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 — 2026-11-24
+
+- **Classifier coverage**: navigation and confirmation actions (下一步/继续/确认/确定/取消/退出/完成/重试) now count as 操作步骤; condition openers (根据/按照/针对/当/若/如果/需要) and device/network/system wording (机型/设备/网络/系统/通道/权限/条件/场景/情况/开关) count as 前置条件.
+- Keeps the review sheet as the source of truth: undecided nodes are still reported as 未分类 instead of being guessed.
+
 ## 1.0.2 — 2026-11-24
 
 - **New `qa` mode**: writes the fixed header 模块 / 子模块 / 用例场景 / 优先级 / 前置条件 / 操作步骤 / 预期结果 / XMind 来源, plus a 分类核对 review sheet listing every inferred decision with its score and the rule that fired.

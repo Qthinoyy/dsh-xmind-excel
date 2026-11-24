@@ -42,6 +42,9 @@ test('classifyNode reads numbered notes as steps and state words as precondition
   assert.equal(classifyNode({ title: '登录流程', notes: '1. 打开\n2. 输入', markers: [] }).verdict, '步骤')
   assert.equal(classifyNode({ title: '已激活设备', notes: '', markers: [] }).verdict, '前置')
   assert.equal(classifyNode({ title: '点击开始', notes: '', markers: [] }).verdict, '步骤')
+  assert.equal(classifyNode({ title: '下一步', notes: '', markers: [] }).verdict, '步骤')
+  assert.equal(classifyNode({ title: '根据机型区分', notes: '', markers: [] }).verdict, '前置')
+  assert.equal(classifyNode({ title: '无网络情况', notes: '', markers: [] }).verdict, '前置')
 })
 
 test('classifyNode leaves ambiguous nodes unclassified', () => {
