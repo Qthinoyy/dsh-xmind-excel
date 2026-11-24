@@ -18,6 +18,7 @@ Two tools do the work; everything runs on the local machine and writes one `.xls
    | Any map, faithful dump | `outline` (default) — one row per node, level columns, notes, labels, links, full path |
    | Case titles start with 验证 / 校验 / 测试 | `testcase` — module, case title, priority, precondition, steps, expected results |
    | 模块 → 场景 → 用例 → 预期 | `checklist` with `caseDepth` (e.g. `2,3`) — module, scene, case, expectations from child nodes |
+   | QA table with 模块/子模块/用例场景/优先级/前置条件/操作步骤/预期结果/XMind 来源 | `qa` with `sceneLevel` (default 3) and `levelOffset` when the first level is a version or device |
    | Printable / diagram-like | `matrix` — one row per leaf, ancestor cells merged |
    | User is unsure | `all` — outline + testcase + matrix in one workbook |
 
@@ -27,10 +28,24 @@ Two tools do the work; everything runs on the local machine and writes one `.xls
 ## Parameters that matter
 
 - `caseDepth` (`checklist` only): tree levels that hold cases, for example `"3"` or `"2,3"`. A node on one of those levels is a case unless a deeper case level exists below it; anything above is treated as module/scene. Level 2 nodes starting with 说明/备注/注意/举例/前提/范围 are treated as annotations: the scene column stays empty and the text moves to the notes column.
+- `sceneLevel` (`qa` only): the 用例场景 level, default 3. `levelOffset` shifts module/submodule/scene down by N levels (use 1 when level 1 is a version or a device). `preconditionDepth` / `stepDepth` force levels to count as 前置条件 / 操作步骤. `withDetail: false` skips the review sheet.
 - `sheet`: convert only the canvas whose title matches (exact first, then substring).
 - `maxLevel`: level columns to expand, 1–30, default 12. Deeper nodes keep their full path in the path column.
 - `splitSheets`: name worksheets `<canvas>.<view>` instead of sharing the canvas title.
 - `explodeSteps` (`testcase`): one row per step instead of one row per case.
+
+## QA classification rules (`qa`)
+
+XMind does not encode "precondition" vs "step"; the map only has titles, notes, markers and position. The tool therefore applies signals strongest first and writes every decision into the 分类核对 sheet:
+
+1. Explicit prefix — `前置：`/`前提：`/`环境：` → 前置条件; `步骤：`/`操作：`/`流程：` → 操作步骤; `预期：`/`结果：` → not put in either column.
+2. Notes — a numbered list (2+ lines) → 操作步骤; 前置/前提/环境/账号 wording → 前置条件.
+3. Bracket annotation — text in （…) → 前置条件, priority markers `(P1)` and `(锚定)` exceptions excluded.
+4. Wording — verb-initial → 操作步骤; a verb word plus a state word → 操作步骤 (the condition stays inside the step text); state words 已/未/当前/断网/默认/安装… → 前置条件.
+
+Nothing decisive (or a question like 是否/如何/怎么) → 未分类: the node is left out of both columns, listed in 分类核对, and its full path stays in XMind 来源. Tell the user to scan 分类核对 before importing the table; that review is the intended workflow, not a defect.
+
+Note: maps written in a decision-tree style have almost no real steps — most nodes are conditions expectations. In that case prefer reporting that 操作步骤 is mostly empty rather than accepting a guessed split.
 
 ## Test case extraction rules (`testcase`)
 

@@ -8,7 +8,7 @@ Two tools, four views, no runtime dependencies, no network access.
 
 | Tool | What it does |
 |---|---|
-| `xmind_to_excel` | Reads a `.xmind` file and writes an `.xlsx` workbook: `outline`, `testcase`, `checklist`, `matrix`, or `all` |
+| `xmind_to_excel` | Reads a `.xmind` file and writes an `.xlsx` workbook: `outline`, `testcase`, `checklist`, `qa`, `matrix`, or `all` |
 | `xmind_inspect` | Summarizes canvases, node count, depth distribution, priority markers and sample titles per level — pick the view and case levels from facts, not guesses |
 
 ## Views
@@ -18,6 +18,7 @@ Two tools, four views, no runtime dependencies, no network access.
 | `outline` (default) | 层级1…层级N, 标题, 备注, 标签, 超链接, 标记/优先级, 路径, 相对深度 | A faithful dump: one row per node, filterable and pivot-friendly |
 | `testcase` | 模块, 用例标题, 优先级, 前置条件, 步骤, 预期结果, 标签, 超链接, 备注 | Maps whose case titles start with `验证` / `校验` / `测试` |
 | `checklist` | 模块, 场景, 用例标题, 优先级, 预期结果, 标签, 超链接, 备注 | Maps shaped 模块 → 场景 → 用例 → 预期; case levels come from `caseDepth` |
+| `qa` | **QA table**: 模块, 子模块, 用例场景, 优先级, 前置条件, 操作步骤, 预期结果, XMind 来源, plus a 分类核对 sheet with each inferred decision, score and rule | Test-case handoff; the map carries no explicit precondition/step semantics, so the split is heuristic and reviewable |
 | `matrix` | 层级1…层级N with vertically merged ancestor cells | Printing and review: one row per leaf path, reads like the expanded map |
 | `all` | `outline` + `testcase` + `matrix` sheets | Hand all three to the user and let them choose |
 
@@ -61,6 +62,8 @@ xmind_to_excel { input: "D:\\cases\\calculator.xmind",
 Parameter notes:
 
 - `caseDepth` (`checklist` only) lists the tree levels that hold cases, e.g. `"3"` or `"2,3"`. A node on one of those levels is a case unless a deeper case level exists below it; higher nodes become module/scene. Level-2 nodes titled 说明/备注/注意/举例/前提/范围 are treated as annotations: the scene column stays empty and the text moves to the notes column.
+- `sceneLevel` (`qa` only) picks the 用例场景 level (default 3); `levelOffset` shifts module/submodule/scene down when the first level is a version or a device; `preconditionDepth` / `stepDepth` force levels to count as 前置条件 / 操作步骤; `withDetail: false` skips the review sheet.
+- `qa` classification, strongest signal first: explicit prefixes (`前置：` / `步骤：` / `预期：`), numbered notes (steps) or 前置/前提 wording (precondition), bracket annotations, then wording (verb → step, state words 已/未/断网/安装… → precondition). Nothing decisive → 未分类: the node stays out of both columns, appears in 「分类核对」, and the full path remains in the XMind 来源 column.
 - `output` sets the workbook path. Without it the workbook lands next to the input as `<input>.xlsx` (single `outline`/`all`) or `<input>.<mode>.xlsx`; if that name is taken a timestamp suffix is added unless `overwrite: true`.
 - `sheet` converts only a matching canvas; `maxLevel` (1–30, default 12) controls how many level columns expand; `splitSheets` names worksheets `<canvas>.<view>`; `explodeSteps` writes one row per step in `testcase` mode.
 
@@ -82,7 +85,7 @@ Case recognition rules for `testcase` are documented in the bundled skill and in
 ## Development
 
 ```powershell
-node --test                 # 25 tests: parsing, four views, zip/xlsx structure, error paths, packaging
+node --test                 # 34 tests: parsing, four views, zip/xlsx structure, error paths, packaging
 node -e "import('./lib/convert.js').then(...)"   # or use the tools from a DSH session
 ```
 
